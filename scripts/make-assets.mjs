@@ -89,7 +89,7 @@ const BARCODES = [
   ['barcode-code128', { ...DEFAULT_BAR }, null],
   ['barcode-ean13', { ...DEFAULT_BAR, format: 'ean13', text: '5901234123457', gradient: true, fg: '#1D4FB8', fg2: '#0B2A6B', gradientAngle: 90 }, null],
   ['barcode-code39', { ...DEFAULT_BAR, format: 'code39', text: 'QR-QUAKE', round: 0.6, shrink: 0.12, fg: '#9D174D', bg: '#FFF1F2' }, null],
-  ['barcode-datamatrix', { ...DEFAULT_BAR, format: 'datamatrix', text: 'QR Quake', quiet: 3, round: 0.5, fg: '#14532D', bg: '#F7FBEF' }, null],
+  ['barcode-itf', { ...DEFAULT_BAR, format: 'itf', text: '1234567890', fg: '#14532D', bg: '#F7FBEF', height: 0.55 }, null],
   ['barcode-pdf417', { ...DEFAULT_BAR, format: 'pdf417', text: 'QR Quake PDF417 barcode', quiet: 3 }, null],
   ['barcode-card', { ...DEFAULT_BAR, format: 'code128', text: 'TICKET-0042', fg: '#451A03' }, 'ticket'],
 ];
@@ -121,4 +121,18 @@ for (const [name, bar, preset] of BARCODES) {
   const options = barcodeVerifyOptions(enc);
   must(name, options ? await verifyScene(scene, enc.expected, options) : { status: 'good', passes: 0, total: 0 });
   save(name, scene);
+}
+
+// Hero: the author's GitHub page as a QR code with the profile picture in a circle (docs/avatar.jpg).
+if (fs.existsSync(out('docs/avatar.jpg'))) {
+  const img = await loadImage(fs.readFileSync(out('docs/avatar.jpg')));
+  const avatar = createCanvas(512, 512);
+  avatar.getContext('2d').drawImage(img, 0, 0, 512, 512);
+  const HERO = 'https://github.com/MrLemonOff';
+  const spec = art({ shape: 'circle', size: 0.3, padding: 0.5, ring: 0.8, ringColor: '#2F6BDC' }, { eyeFrame: 'rounded', eyeBall: 'rounded', shape: 'liquid', gradient: true, fg: '#1D4FB8', fg2: '#0B2A6B', gradientAngle: 135 });
+  const { scene, spec: clean } = createQR({ text: HERO, spec, source: avatar });
+  must('hero', limitByContrast(await verifyScene(scene, HERO), inkContrast(clean)));
+  const canvas = createCanvas(900, 900);
+  paintCanvas(scene, canvas, 900);
+  fs.writeFileSync(out('docs/hero.png'), canvas.toBuffer('image/png'));
 }

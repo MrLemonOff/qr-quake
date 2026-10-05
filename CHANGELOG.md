@@ -35,4 +35,4 @@ First release.
 - Export to PNG (512 to 4096 pixels), SVG and the clipboard.
 - Light and dark themes, in the AlgoWorld design.
 - A strict Content-Security-Policy that blocks all network access in the production build.
-- Tests that decode real pixels, a browser smoke test, GitHub Actions for CI and GitHub Pages.
+- Tests that decode real pixels, a browser smoke test, a GitHub Actions workflow for CI.
