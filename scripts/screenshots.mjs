@@ -1,5 +1,3 @@
-// Takes the README screenshots from the real app: docs/screenshots/*.png.
-// Needs Chrome, Edge or Chromium installed (set CHROME_PATH to point at a specific one).
 import fs from 'node:fs';
 import path from 'node:path';
 import { startApp, root } from './lib.mjs';
@@ -55,14 +53,12 @@ const pickType = async (page, search) => {
 const URL_TEXT = 'https://example.com/qr-quake';
 
 try {
-  // Home: light, default center sign.
   {
     const page = await open();
     await type(page, '[data-bind="content.values.text.text"]', URL_TEXT);
     await shot(page, 'home-light');
     await page.close();
   }
-  // Hero: dark, the author's GitHub page as a black QR code with the profile picture in a circle (docs/avatar.jpg).
   {
     const page = await open({ theme: 'dark' });
     await pickType(page, 'website');
@@ -81,7 +77,6 @@ try {
     await shot(page, 'home-dark');
     await page.close();
   }
-  // Dialogs and tabs (cards at a higher scale).
   {
     const page = await open({ scale: 2, height: 1100 });
     await click(page, '#typeBtn');
@@ -101,7 +96,6 @@ try {
     await page.keyboard.press('Escape');
     await wait(300);
 
-    // Picture, colorize.
     await click(page, '#artChoose');
     await click(page, '#artTabs [data-value="picture"]');
     await click(page, '.sample:nth-child(3)');
@@ -109,7 +103,6 @@ try {
     await shot(page, 'art-picture', '.editor');
     await shot(page, 'preview-fill', '.preview-card');
 
-    // Style tab with a picker open.
     await click(page, '[data-bind="spec.art.placement"] [data-value="center"]');
     await click(page, '#artChoose');
     await click(page, '#artTabs [data-value="icon"]');
@@ -123,7 +116,6 @@ try {
     await click(page, '.palette .swatch[data-palette="Grape"]');
     await click(page, '.switch[data-bind="spec.gradient"]');
 
-    // Card tab.
     await tab(page, 'card');
     await click(page, '#cardGrid [data-value="sparkle"]');
     await wait(500);
@@ -131,7 +123,6 @@ try {
     await shot(page, 'preview-card', '.preview-card');
     await page.close();
   }
-  // Wi-Fi form.
   {
     const page = await open({ scale: 2, height: 1100 });
     await pickType(page, 'wifi');
@@ -140,7 +131,6 @@ try {
     await shot(page, 'content-wifi', '.editor');
     await page.close();
   }
-  // Barcode.
   {
     const page = await open({ height: 900 });
     await click(page, '.mode-seg [data-value="barcode"]');
@@ -158,7 +148,6 @@ try {
     await shot(page, 'preview-barcode', '.preview-card');
     await page.close();
   }
-  // Phone.
   {
     const page = await open({ width: 390, height: 844, scale: 2, mobile: true });
     await type(page, '[data-bind="content.values.text.text"]', URL_TEXT);

@@ -1,4 +1,3 @@
-// Shared helper for the browser scripts: builds the app, serves it and launches Chrome, Edge or Chromium.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
@@ -7,7 +6,6 @@ import puppeteer from 'puppeteer-core';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-// Run Vite with this same Node, so no shell is involved and it works on every OS.
 const vite = path.join(root, 'node_modules', 'vite', 'bin', 'vite.js');
 
 const CANDIDATES = [

@@ -1,5 +1,3 @@
-// Generates the images used by README.md: docs/logo.png, docs/icons/*.svg and docs/gallery/*.png.
-// Every gallery code is checked with the decoders, so the README never shows a code that does not scan.
 import '../tests/setup-env.js';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,7 +19,6 @@ const out = (...p) => path.join(root, ...p);
 fs.mkdirSync(out('docs/icons'), { recursive: true });
 fs.mkdirSync(out('docs/gallery'), { recursive: true });
 
-// Logo: the SVG in /public rendered to a crisp PNG.
 {
   const img = await loadImage(fs.readFileSync(out('public/logo.svg')));
   const canvas = createCanvas(384, 384);
@@ -30,7 +27,6 @@ fs.mkdirSync(out('docs/gallery'), { recursive: true });
   console.log('docs/logo.png');
 }
 
-// Icons: Lucide (ISC) outlines in the accent color, saved as standalone SVG files.
 const ICONS = {
   image: 'Image', shapes: 'Shapes', palette: 'Palette', scan: 'ScanLine', link: 'Link', download: 'Download',
   shield: 'ShieldCheck', smartphone: 'Smartphone', shuffle: 'Shuffle', wand: 'Wand', layers: 'Layers',
@@ -46,7 +42,6 @@ for (const [file, name] of Object.entries(ICONS)) {
 }
 console.log(`docs/icons: ${Object.keys(ICONS).length} icons`);
 
-// Gallery.
 const lib = await loadBarcodeLibrary();
 const TEXT = 'https://example.com/qr-quake';
 const art = (patch = {}, top = {}) => ({ ...DEFAULT_SPEC, ...top, art: { ...DEFAULT_SPEC.art, ...patch } });

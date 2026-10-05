@@ -1,5 +1,3 @@
-// End-to-end smoke test of the production build, with its Content-Security-Policy active.
-// Fails on any console error, blocked request or network call, and checks the main flows.
 import { startApp } from './lib.mjs';
 
 const { browser, url, stop } = await startApp(4180);
@@ -40,7 +38,6 @@ try {
   await settle();
   check('default code scans', (await status()) === 'good');
 
-  // Content types
   await click('#typeBtn');
   await type('#typeSearch', 'wifi');
   await page.evaluate(() => document.querySelector('.type-tile:not([hidden])').click());
@@ -64,7 +61,6 @@ try {
   check('oversized data shows an error', (await status()) === 'error');
   await type('[data-bind="content.values.text.text"]', 'https://example.com');
 
-  // Art: icon browser and a picture
   await tab('art');
   await click('#artChoose');
   await type('#artSearch', 'heart');
@@ -79,7 +75,6 @@ try {
   await settle();
   check('colorized picture scans', (await status()) === 'good');
 
-  // Style: weak contrast is flagged and repaired
   await tab('style');
   await type('[data-bind="spec.fg"]', '#dddddd');
   await settle();
@@ -89,14 +84,12 @@ try {
   await settle();
   check('auto-fix repairs it', (await status()) === 'good');
 
-  // Card
   await tab('card');
   await click('#cardGrid [data-value="sparkle"]');
   await settle();
   check('card scans', (await status()) === 'good');
   await click('#cardGrid [data-value="none"]');
 
-  // Barcode
   await click('.mode-seg [data-value="barcode"]');
   await wait(1500);
   await settle();
