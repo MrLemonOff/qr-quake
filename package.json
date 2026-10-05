@@ -1,0 +1,55 @@
+{
+  "name": "qr-quake",
+  "version": "1.1.0",
+  "description": "Art QR codes, cards and barcodes: put any picture or sign inside a QR code that still scans. Runs fully in your browser.",
+  "keywords": [
+    "qr",
+    "qr-code",
+    "qr-code-generator",
+    "art-qr",
+    "barcode",
+    "halftone",
+    "logo",
+    "card",
+    "javascript",
+    "vite",
+    "privacy"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/MrLemonOff/qr-quake#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrLemonOff/qr-quake.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MrLemonOff/qr-quake/issues"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "smoke": "node scripts/smoke.mjs",
+    "assets": "node scripts/make-assets.mjs",
+    "brands": "node scripts/make-brands.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@zxing/library": "^0.23.0",
+    "bwip-js": "^4.11.4",
+    "jsqr": "^1.4.0",
+    "lucide": "^1.52.0",
+    "qrcode-generator": "^2.0.4",
+    "simple-icons": "^16.34.0"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.10",
+    "puppeteer-core": "^25.12.0",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}

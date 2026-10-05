@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Quake - Art QR codes, cards and barcodes</title>
+  <meta name="description" content="Make art QR codes with your picture or logo, put them in a card, or create a barcode. Free, unlimited, no login. Everything runs in your browser.">
+  <meta name="theme-color" content="#FAF9F5">
+  <link rel="icon" type="image/svg+xml" href="./logo.svg">
+  <script src="./theme-init.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the generator</a>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="QR Quake home">
+      <img src="./logo.svg" alt="" width="34" height="34">
+      <span class="brand-name">QR Quake</span>
+    </a>
+    <div class="seg mode-seg" role="tablist" aria-label="What to make" data-bind="mode">
+      <button type="button" role="tab" data-value="qr"><span class="ico" data-icon="QrCode"></span>QR code</button>
+      <button type="button" role="tab" data-value="barcode"><span class="ico" data-icon="Barcode"></span>Barcode</button>
+    </div>
+    <nav class="top-actions" aria-label="Site">
+      <a class="btn ghost" id="repoLink" href="https://github.com/MrLemonOff/qr-quake" target="_blank" rel="noopener">
+        <span class="ico" data-icon="Github"></span><span class="hide-sm">GitHub</span>
+      </a>
+      <button class="btn ghost icon-only" id="themeToggle" type="button" aria-label="Switch between light and dark theme">
+        <span class="ico" data-icon="Moon"></span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main" class="layout">
+    <section class="editor card" aria-label="Editor">
+      <div class="tabs" role="tablist" aria-label="Sections" data-bind="tab">
+        <button type="button" role="tab" data-value="content"><span class="ico" data-icon="Pencil"></span>Content</button>
+        <button type="button" role="tab" data-value="art" data-show="mode:qr"><span class="ico" data-icon="Image"></span>Art</button>
+        <button type="button" role="tab" data-value="style"><span class="ico" data-icon="Palette"></span>Style</button>
+        <button type="button" role="tab" data-value="card"><span class="ico" data-icon="IdCard"></span>Card</button>
+      </div>
+
+      <!-- ============ CONTENT ============ -->
+      <div class="tab-body" data-show="tab:content">
+        <div class="stack" data-show="mode:qr">
+          <button type="button" class="type-btn" id="typeBtn" aria-haspopup="dialog">
+            <span class="type-ico" id="typeIcon"></span>
+            <span class="type-text"><strong id="typeName">Text</strong><small id="typeDesc"></small></span>
+            <span class="type-change">Change<span class="ico" data-icon="ChevronsUpDown"></span></span>
+          </button>
+          <div class="grid2" id="typeForm"></div>
+          <p class="hint" id="typeHint" hidden></p>
+        </div>
+
+        <div class="stack" data-show="mode:barcode">
+          <label class="field">
+            <span>Barcode type</span>
+            <select class="select" id="barFormat" data-bind="bar.format"></select>
+          </label>
+          <p class="hint" id="barDesc"></p>
+          <label class="field">
+            <span>Text or number</span>
+            <input class="input" id="barText" data-bind="bar.text" autocomplete="off" spellcheck="false">
+          </label>
+          <div class="inline-row">
+            <button type="button" class="btn soft small" id="barExample">Use an example</button>
+            <span class="hint" id="barNote"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ ART ============ -->
+      <div class="tab-body" data-show="tab:art">
+        <div class="art-pick">
+          <canvas id="artThumb" width="112" height="112" aria-hidden="true"></canvas>
+          <div class="art-pick-text"><strong id="artName">No art</strong><small id="artKind"></small></div>
+          <button type="button" class="btn primary small" id="artChoose"><span class="ico" data-icon="Search"></span>Choose art</button>
+        </div>
+        <div class="recent" id="artRecentWrap" hidden>
+          <span class="label">Recent</span>
+          <div class="recent-row" id="artRecent"></div>
+        </div>
+
+        <div class="stack" data-show="art.kind:!none">
+          <div class="field">
+            <span>Where does it go?</span>
+            <div class="seg wide" role="tablist" aria-label="Art placement" data-bind="spec.art.placement">
+              <button type="button" role="tab" data-value="center">Center</button>
+              <button type="button" role="tab" data-value="fill">Colorize</button>
+            </div>
+            <p class="hint" data-show="spec.art.placement:center">A clean sign in the middle. The code around it keeps the data.</p>
+            <p class="hint" data-show="spec.art.placement:fill">The dots take their colors from your picture.</p>
+          </div>
+
+          <div class="stack" data-show="spec.art.placement:center">
+            <div class="grid2">
+              <div data-slider="spec.art.size" data-label="Size" data-min="0.08" data-max="0.5" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="spec.art.padding" data-label="Space around" data-min="0" data-max="3" data-step="0.25" data-fmt="mod"></div>
+              <div data-slider="spec.art.ring" data-label="Ring width" data-min="0" data-max="2" data-step="0.1" data-fmt="mod"></div>
+              <div class="field">
+                <span>Shape</span>
+                <select class="select" data-bind="spec.art.shape">
+                  <option value="circle">Circle</option>
+                  <option value="rounded">Rounded square</option>
+                  <option value="square">Square</option>
+                  <option value="free">Free (keep outline)</option>
+                </select>
+              </div>
+            </div>
+            <div class="color-row">
+              <div data-color="spec.art.ringColor" data-label="Ring color"></div>
+              <div data-color="spec.art.plate" data-label="Plate behind" data-clear="Off"></div>
+            </div>
+          </div>
+
+          <div class="stack" data-show="spec.art.placement:fill">
+            <div class="grid2">
+              <div data-slider="spec.art.strength" data-label="Color boldness" data-min="0" data-max="1" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="spec.art.backdrop" data-label="Faded picture behind" data-min="0" data-max="1" data-step="0.01" data-fmt="pct"></div>
+            </div>
+          </div>
+
+          <div class="stack" data-show="art.kind:icon,brand,emoji,text">
+            <div class="color-row">
+              <div data-color="art.color" data-label="Sign color"></div>
+              <div class="row-switch compact">
+                <span>Round badge</span>
+                <button type="button" class="switch" role="switch" aria-label="Round badge" data-bind="art.badge"></button>
+              </div>
+            </div>
+            <label class="field" data-show="art.kind:text">
+              <span>Letters, digits or an emoji</span>
+              <input class="input" data-bind="art.text" maxlength="8" autocomplete="off" placeholder="Q">
+            </label>
+          </div>
+
+          <details class="acc" data-show="art.kind:picture">
+            <summary>Picture settings</summary>
+            <div class="grid2">
+              <div data-slider="spec.art.zoom" data-label="Zoom" data-min="1" data-max="4" data-step="0.05" data-fmt="mult"></div>
+              <div data-slider="spec.art.brightness" data-label="Brightness" data-min="-1" data-max="1" data-step="0.02" data-fmt="signed"></div>
+              <div data-slider="spec.art.offsetX" data-label="Move left / right" data-min="-1" data-max="1" data-step="0.02" data-fmt="signed"></div>
+              <div data-slider="spec.art.contrast" data-label="Contrast" data-min="-1" data-max="1" data-step="0.02" data-fmt="signed"></div>
+              <div data-slider="spec.art.offsetY" data-label="Move up / down" data-min="-1" data-max="1" data-step="0.02" data-fmt="signed"></div>
+              <div data-slider="spec.art.saturation" data-label="Color" data-min="-1" data-max="1" data-step="0.02" data-fmt="signed"></div>
+            </div>
+            <div class="field">
+              <span>Crop to</span>
+              <select class="select" data-bind="spec.art.shape">
+                <option value="circle">Circle</option>
+                <option value="rounded">Rounded square</option>
+                <option value="square">Square</option>
+                <option value="free">Whole picture</option>
+              </select>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- ============ STYLE (QR) ============ -->
+      <div class="tab-body" data-show="tab:style">
+        <div class="stack" data-show="mode:qr">
+          <details class="acc" open>
+            <summary>Dots</summary>
+            <div class="picker" id="shapePicker" data-bind="spec.shape" data-label="Dot shape"></div>
+            <div class="grid2">
+              <div data-slider="spec.scale" data-label="Dot size" data-min="0.6" data-max="1.1" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="spec.roundness" data-label="Roundness" data-min="0" data-max="1" data-step="0.01" data-fmt="pct"></div>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Corners</summary>
+            <div class="grid2">
+              <div class="picker" id="framePicker" data-bind="spec.eyeFrame" data-label="Frame"></div>
+              <div class="picker" id="ballPicker" data-bind="spec.eyeBall" data-label="Center"></div>
+            </div>
+            <div class="color-row">
+              <div data-color="spec.eyeColor" data-label="Frame color" data-clear="Follow dots"></div>
+              <div data-color="spec.eyeBallColor" data-label="Center color" data-clear="Follow frame"></div>
+            </div>
+          </details>
+          <details class="acc" open>
+            <summary>Colors</summary>
+            <div class="palette" id="palette" role="group" aria-label="Color presets"></div>
+            <div class="color-row">
+              <div data-color="spec.fg" data-label="Dots"></div>
+              <div data-color="spec.fg2" data-label="Second color" data-show="spec.gradient:true"></div>
+              <div data-color="spec.bg" data-label="Background"></div>
+            </div>
+            <div class="inline-row wrap">
+              <div class="row-switch compact"><span>Gradient</span><button type="button" class="switch" role="switch" aria-label="Gradient" data-bind="spec.gradient"></button></div>
+              <div class="row-switch compact" data-show="spec.art.placement:center,fill"><span>Transparent background</span><button type="button" class="switch" role="switch" aria-label="Transparent background" data-bind="spec.transparent"></button></div>
+            </div>
+            <div class="grid2" data-show="spec.gradient:true">
+              <div class="field">
+                <span>Gradient type</span>
+                <div class="seg" role="tablist" aria-label="Gradient type" data-bind="spec.gradientType">
+                  <button type="button" role="tab" data-value="linear">Linear</button>
+                  <button type="button" role="tab" data-value="radial">Radial</button>
+                </div>
+              </div>
+              <div data-slider="spec.gradientAngle" data-label="Angle" data-min="0" data-max="360" data-step="15" data-fmt="deg" data-show="spec.gradientType:linear"></div>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Advanced</summary>
+            <div class="grid2">
+              <div data-slider="spec.quiet" data-label="Quiet border" data-min="1" data-max="8" data-step="1" data-fmt="mod"></div>
+              <div data-slider="spec.detail" data-label="Detail (more, smaller dots)" data-min="0" data-max="10" data-step="1" data-fmt="int"></div>
+              <label class="field"><span>Error correction</span>
+                <select class="select" data-bind="spec.ec">
+                  <option value="H">High (best for art)</option>
+                  <option value="Q">Quartile</option>
+                  <option value="M">Medium</option>
+                  <option value="L">Low (smallest code)</option>
+                </select>
+              </label>
+            </div>
+          </details>
+        </div>
+
+        <!-- Style (barcode) -->
+        <div class="stack" data-show="mode:barcode">
+          <details class="acc" open>
+            <summary>Bars</summary>
+            <div class="grid2">
+              <div data-slider="bar.height" data-label="Height" data-min="0.12" data-max="1.2" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="bar.quiet" data-label="Side margin" data-min="0" data-max="24" data-step="1" data-fmt="mod"></div>
+              <div data-slider="bar.round" data-label="Rounded ends" data-min="0" data-max="1" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="bar.shrink" data-label="Thinner bars" data-min="0" data-max="0.45" data-step="0.01" data-fmt="pct"></div>
+            </div>
+          </details>
+          <details class="acc" open>
+            <summary>Text under the bars</summary>
+            <div class="row-switch compact"><span>Show the text</span><button type="button" class="switch" role="switch" aria-label="Show the text" data-bind="bar.showText"></button></div>
+            <div class="grid2" data-show="bar.showText:true">
+              <div data-slider="bar.textScale" data-label="Text size" data-min="0.6" data-max="1.8" data-step="0.02" data-fmt="pct"></div>
+              <label class="field"><span>Font</span>
+                <select class="select" data-bind="bar.font">
+                  <option value="mono">Monospace</option><option value="sans">Sans</option><option value="serif">Serif</option>
+                  <option value="rounded">Rounded</option><option value="display">Bold display</option><option value="script">Script</option>
+                </select>
+              </label>
+              <div data-color="bar.textColor" data-label="Text color" data-clear="Same as bars"></div>
+            </div>
+          </details>
+          <details class="acc" open>
+            <summary>Colors</summary>
+            <div class="palette" id="barPalette" role="group" aria-label="Color presets"></div>
+            <div class="color-row">
+              <div data-color="bar.fg" data-label="Bars"></div>
+              <div data-color="bar.fg2" data-label="Second color" data-show="bar.gradient:true"></div>
+              <div data-color="bar.bg" data-label="Background"></div>
+            </div>
+            <div class="inline-row wrap">
+              <div class="row-switch compact"><span>Gradient</span><button type="button" class="switch" role="switch" aria-label="Gradient" data-bind="bar.gradient"></button></div>
+              <div class="row-switch compact"><span>Transparent background</span><button type="button" class="switch" role="switch" aria-label="Transparent background" data-bind="bar.transparent"></button></div>
+            </div>
+            <div class="grid2" data-show="bar.gradient:true">
+              <div class="field">
+                <span>Gradient type</span>
+                <div class="seg" role="tablist" aria-label="Gradient type" data-bind="bar.gradientType">
+                  <button type="button" role="tab" data-value="linear">Linear</button>
+                  <button type="button" role="tab" data-value="radial">Radial</button>
+                </div>
+              </div>
+              <div data-slider="bar.gradientAngle" data-label="Angle" data-min="0" data-max="360" data-step="15" data-fmt="deg" data-show="bar.gradientType:linear"></div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- ============ CARD ============ -->
+      <div class="tab-body" data-show="tab:card">
+        <div class="field">
+          <span>Put it in a card</span>
+          <div class="card-grid" id="cardGrid" role="listbox" aria-label="Card styles" data-bind="card.preset"></div>
+        </div>
+        <div class="stack" data-show="card.preset:!none">
+          <details class="acc" open>
+            <summary>Text</summary>
+            <div class="grid2">
+              <label class="field span2"><span>Title</span><input class="input" data-bind="card.title" maxlength="60" autocomplete="off" placeholder="SCAN ME"></label>
+              <label class="field"><span>Subtitle</span><input class="input" data-bind="card.subtitle" maxlength="60" autocomplete="off"></label>
+              <label class="field"><span>Footer</span><input class="input" data-bind="card.footer" maxlength="60" autocomplete="off" placeholder="your-site.com"></label>
+              <label class="field"><span>Font</span>
+                <select class="select" data-bind="card.font">
+                  <option value="sans">Sans</option><option value="rounded">Rounded</option><option value="serif">Serif</option>
+                  <option value="mono">Monospace</option><option value="display">Bold display</option><option value="script">Script</option>
+                </select>
+              </label>
+              <div data-color="card.textColor" data-label="Text color"></div>
+              <div data-slider="card.titleSize" data-label="Title size" data-min="0.5" data-max="2" data-step="0.02" data-fmt="pct"></div>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Background</summary>
+            <div class="color-row">
+              <div data-color="card.bg" data-label="Color"></div>
+              <div data-color="card.bg2" data-label="Second color" data-show="card.bgGradient:true"></div>
+            </div>
+            <div class="inline-row wrap">
+              <div class="row-switch compact"><span>Gradient</span><button type="button" class="switch" role="switch" aria-label="Card gradient" data-bind="card.bgGradient"></button></div>
+            </div>
+            <div data-slider="card.bgAngle" data-label="Gradient angle" data-min="0" data-max="360" data-step="15" data-fmt="deg" data-show="card.bgGradient:true"></div>
+          </details>
+          <details class="acc">
+            <summary>Border</summary>
+            <div class="grid2">
+              <label class="field"><span>Style</span>
+                <select class="select" data-bind="card.borderStyle">
+                  <option value="solid">Solid</option><option value="double">Double</option><option value="dashed">Dashed</option>
+                  <option value="dotted">Dotted</option><option value="gradient">Gradient</option><option value="neon">Neon</option>
+                </select>
+              </label>
+              <div data-slider="card.border" data-label="Width" data-min="0" data-max="0.06" data-step="0.002" data-fmt="thin"></div>
+            </div>
+            <div class="color-row">
+              <div data-color="card.borderColor" data-label="Color"></div>
+              <div data-color="card.borderColor2" data-label="Second color" data-show="card.borderStyle:gradient,neon"></div>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Shape and depth</summary>
+            <div class="grid2">
+              <div data-slider="card.radius" data-label="Corner roundness" data-min="0" data-max="0.5" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="card.padding" data-label="Space inside" data-min="0.02" data-max="0.5" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="card.shadow" data-label="Shadow" data-min="0" data-max="1" data-step="0.01" data-fmt="pct"></div>
+              <div data-slider="card.glow" data-label="Glow" data-min="0" data-max="1" data-step="0.01" data-fmt="pct"></div>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Decoration</summary>
+            <div class="grid2">
+              <label class="field"><span>Ornament</span>
+                <select class="select" data-bind="card.ornament">
+                  <option value="none">None</option><option value="brackets">Scanner corners</option><option value="sparkles">Sparkles</option>
+                  <option value="stars">Stars</option><option value="dots">Dots</option><option value="corners">Curved corners</option>
+                </select>
+              </label>
+              <div data-color="card.ornamentColor" data-label="Ornament color" data-clear="Match border"></div>
+            </div>
+            <div class="inline-row wrap">
+              <div class="row-switch compact"><span>White plate behind the code</span><button type="button" class="switch" role="switch" aria-label="Plate" data-bind="card.plate"></button></div>
+              <div class="row-switch compact"><span>Ticket notches</span><button type="button" class="switch" role="switch" aria-label="Ticket notches" data-bind="card.ticket"></button></div>
+              <div class="row-switch compact"><span>Polaroid bottom</span><button type="button" class="switch" role="switch" aria-label="Polaroid bottom" data-bind="card.polaroid"></button></div>
+            </div>
+            <div data-color="card.plateColor" data-label="Plate color" data-show="card.plate:true"></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <aside class="preview" aria-label="Preview and download">
+      <div class="card preview-card">
+        <div class="stage" id="stage">
+          <canvas id="canvas" width="840" height="840" role="img" aria-label="Your code"></canvas>
+          <div class="empty" id="empty" hidden>
+            <span class="ico big" data-icon="QrCode"></span>
+            <p id="emptyText">Type something to start.</p>
+          </div>
+        </div>
+
+        <div class="status" id="status" data-state="idle" role="status" aria-live="polite">
+          <span class="status-ico" id="statusIcon"></span>
+          <div class="status-text">
+            <strong id="statusTitle">Checking</strong>
+            <span id="statusDetail"></span>
+          </div>
+          <button type="button" class="btn soft small" id="fixBtn" hidden><span class="ico" data-icon="Wand"></span>Auto-fix</button>
+        </div>
+        <p class="meta" id="meta"></p>
+
+        <div class="actions">
+          <button type="button" class="btn primary grow" id="dlBtn"><span class="ico" data-icon="Download"></span><span id="dlLabel">Download PNG</span></button>
+          <button type="button" class="btn" id="copyBtn" aria-label="Copy image"><span class="ico" data-icon="Copy"></span>Copy</button>
+        </div>
+        <div class="actions">
+          <select class="select" id="formatSelect" aria-label="File type">
+            <option value="png">PNG</option><option value="svg">SVG (vector)</option><option value="jpg">JPG</option><option value="webp">WebP</option>
+          </select>
+          <select class="select" id="sizeSelect" aria-label="Download size">
+            <option value="512">512 px</option><option value="1024" selected>1024 px</option><option value="2048">2048 px</option><option value="4096">4096 px</option>
+          </select>
+        </div>
+        <div class="actions two">
+          <button type="button" class="btn soft" id="surpriseBtn"><span class="ico" data-icon="Shuffle"></span>Surprise me</button>
+          <button type="button" class="btn ghost" id="resetBtn"><span class="ico" data-icon="RotateCcw"></span>Reset</button>
+        </div>
+      </div>
+      <p class="note">
+        <span class="ico" data-icon="ScanLine"></span>
+        The check uses software decoders. Always test with your phone before you print.
+      </p>
+    </aside>
+  </main>
+
+
+  <!-- Content type dialog -->
+  <dialog id="typeDialog" class="dialog" aria-labelledby="typeDialogTitle">
+    <form method="dialog" class="dialog-head">
+      <h2 id="typeDialogTitle">What should it hold?</h2>
+      <button class="btn ghost icon-only" aria-label="Close"><span class="ico" data-icon="X"></span></button>
+    </form>
+    <label class="search"><span class="ico" data-icon="Search"></span><input id="typeSearch" type="search" placeholder="Search: wifi, instagram, bitcoin, event..." autocomplete="off"></label>
+    <div class="dialog-body" id="typeList"></div>
+  </dialog>
+
+  <!-- Art dialog -->
+  <dialog id="artDialog" class="dialog wide" aria-labelledby="artDialogTitle">
+    <form method="dialog" class="dialog-head">
+      <h2 id="artDialogTitle">Choose your art</h2>
+      <button class="btn ghost icon-only" aria-label="Close"><span class="ico" data-icon="X"></span></button>
+    </form>
+    <div class="seg scroll" role="tablist" aria-label="Kind of art" id="artTabs">
+      <button type="button" role="tab" data-value="icon"><span class="ico" data-icon="Shapes"></span>Icons</button>
+      <button type="button" role="tab" data-value="brand"><span class="ico" data-icon="Globe"></span>Brands</button>
+      <button type="button" role="tab" data-value="emoji"><span class="ico" data-icon="Smile"></span>Emoji</button>
+      <button type="button" role="tab" data-value="text"><span class="ico" data-icon="Type"></span>Text</button>
+      <button type="button" role="tab" data-value="picture"><span class="ico" data-icon="Image"></span>Picture</button>
+    </div>
+    <label class="search" id="artSearchWrap"><span class="ico" data-icon="Search"></span><input id="artSearch" type="search" placeholder="Search icons..." autocomplete="off"></label>
+    <div class="dialog-body" id="artBody"></div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
