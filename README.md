@@ -32,12 +32,8 @@
 </p>
 
 <p align="center">
-  <img src="docs/hero.png" alt="A QR code with a profile picture in a circle in the middle. It opens github.com/MrLemonOff" width="340"><br>
-  <sub>Made with QR Quake. Scan it: it opens the author's GitHub page.</sub>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/home-dark.png" alt="QR Quake in the dark theme: a sunset picture coloring a QR code that scans" width="900">
+  <img src="docs/screenshots/home-dark.png" alt="QR Quake in the dark theme: a black QR code for github.com/MrLemonOff with a profile picture in a circle in the middle, reading as scans reliably" width="900"><br>
+  <sub>The author's GitHub page, made with QR Quake. Scan it from the preview.</sub>
 </p>
 
 ---
@@ -218,7 +214,7 @@ It takes about 30 seconds.
 4. **Card.** Open the **Card** tab to frame the code. Pick a look and type a title.
 5. **Check and download.** The preview says whether the code scans. If it does not, press **Auto-fix**. Then press **Download**, or **Copy** to paste it somewhere.
 
-**Want a code like the one at the top?** Choose **Website link**, type `github.com/your-name`, open **Art > Choose art > Picture**, drop in your profile picture, keep **Center** and set the crop to **Circle**. Add a ring in a color you like.
+**Want a code like the one at the top?** Choose **Website link** and type `github.com/your-name`. Then open **Art > Choose art > Picture**, drop in your profile picture, press **Center**, and set the ring color to black.
 
 ## Content types
 
@@ -357,7 +353,7 @@ npm test              # unit and round-trip tests (real decoders, real pixels)
 npm run build         # production build in dist/
 npm run preview       # serve the production build
 npm run smoke         # browser smoke test of the production build (needs Chrome, Edge or Chromium)
-npm run assets        # rebuild docs/logo.png, docs/icons, docs/gallery and docs/hero.png
+npm run assets        # rebuild docs/logo.png, docs/icons and docs/gallery
 npm run screenshots   # retake docs/screenshots from the real app
 npm run brands        # rebuild the curated brand list in src/core/brands-data.js
 ```
@@ -397,7 +393,7 @@ qr-quake/
   tests/                              Vitest tests, run in Node with a real raster canvas
   scripts/                            asset, brand, screenshot and smoke-test tools
   public/                             logo and the theme script
-  docs/                               logo, hero, icons, gallery and screenshots for this README
+  docs/                               logo, avatar, icons, gallery and screenshots for this README
   .github/                            CI, issue and pull request templates
 ```
 

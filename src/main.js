@@ -17,6 +17,7 @@ import { typeOf, buildPayload } from './core/types.js';
 import { BARCODES, BARCODE_BY_ID, DEFAULT_BAR, BarcodeError, loadBarcodeLibrary, normalizeBar } from './core/barcode.js';
 import { QRTooLongError } from './core/matrix.js';
 import { hasAlpha } from './core/art.js';
+import { fileBase } from './core/filename.js';
 import { drawSample } from './core/samples.js';
 import { DEFAULT_SPEC, PALETTES, SHAPES, EYE_FRAMES, EYE_BALLS } from './core/defaults.js';
 import { CARD_PRESETS, cardFromPreset } from './core/card.js';
@@ -397,7 +398,7 @@ $('dlBtn').addEventListener('click', async () => {
   if (!current) return;
   const format = $('formatSelect').value;
   try {
-    save(await exportBlob(format, Number($('sizeSelect').value)), `${current.mode === 'barcode' ? 'barcode' : 'qr-quake'}.${format}`);
+    save(await exportBlob(format, Number($('sizeSelect').value)), `${fileBase(current.expected, { barcode: current.mode === 'barcode' ? current.spec.format : '' })}.${format}`);
     const s = $('status').dataset.state;
     toast(s === 'fail' || s === 'fragile' ? `${format.toUpperCase()} saved. This one may not scan, so test it first.` : `${format.toUpperCase()} saved.`);
   } catch (err) {

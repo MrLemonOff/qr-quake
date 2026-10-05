@@ -122,17 +122,3 @@ for (const [name, bar, preset] of BARCODES) {
   must(name, options ? await verifyScene(scene, enc.expected, options) : { status: 'good', passes: 0, total: 0 });
   save(name, scene);
 }
-
-// Hero: the author's GitHub page as a QR code with the profile picture in a circle (docs/avatar.jpg).
-if (fs.existsSync(out('docs/avatar.jpg'))) {
-  const img = await loadImage(fs.readFileSync(out('docs/avatar.jpg')));
-  const avatar = createCanvas(512, 512);
-  avatar.getContext('2d').drawImage(img, 0, 0, 512, 512);
-  const HERO = 'https://github.com/MrLemonOff';
-  const spec = art({ shape: 'circle', size: 0.3, padding: 0.5, ring: 0.8, ringColor: '#2F6BDC' }, { eyeFrame: 'rounded', eyeBall: 'rounded', shape: 'liquid', gradient: true, fg: '#1D4FB8', fg2: '#0B2A6B', gradientAngle: 135 });
-  const { scene, spec: clean } = createQR({ text: HERO, spec, source: avatar });
-  must('hero', limitByContrast(await verifyScene(scene, HERO), inkContrast(clean)));
-  const canvas = createCanvas(900, 900);
-  paintCanvas(scene, canvas, 900);
-  fs.writeFileSync(out('docs/hero.png'), canvas.toBuffer('image/png'));
-}

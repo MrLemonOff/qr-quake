@@ -62,15 +62,22 @@ try {
     await shot(page, 'home-light');
     await page.close();
   }
-  // Hero: dark, a colorized picture, art tab.
+  // Hero: dark, the author's GitHub page as a black QR code with the profile picture in a circle (docs/avatar.jpg).
   {
     const page = await open({ theme: 'dark' });
-    await type(page, '[data-bind="content.values.text.text"]', URL_TEXT);
+    await pickType(page, 'website');
+    await type(page, '[data-bind="content.values.url.url"]', 'github.com/MrLemonOff');
     await tab(page, 'art');
     await click(page, '#artChoose');
     await click(page, '#artTabs [data-value="picture"]');
-    await click(page, '.sample');
-    await wait(3000);
+    const input = await page.$('#artBody input[type="file"]');
+    await input.uploadFile(path.join(root, 'docs', 'avatar.jpg'));
+    await wait(1500);
+    await click(page, '[data-bind="spec.art.placement"] [data-value="center"]');
+    await type(page, '[data-bind="spec.art.size"]', '0.3');
+    await type(page, '[data-bind="spec.art.ring"]', '0.8');
+    await type(page, '[data-bind="spec.art.ringColor"]', '#000000');
+    await wait(1200);
     await shot(page, 'home-dark');
     await page.close();
   }
